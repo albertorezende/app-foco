@@ -9,6 +9,8 @@ const AddTaskPage: React.FC = () => {
   const { id } = useParams();
   const { state, addTask, updateTask } = useAppContext();
   
+  if (!state) return null;
+
   const editingTask = id ? state.tasks.find(t => t.id === id) : null;
 
   const [title, setTitle] = useState('');

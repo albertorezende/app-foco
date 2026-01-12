@@ -8,6 +8,8 @@ const RoutinePage: React.FC = () => {
   const { state, toggleRoutine } = useAppContext();
   const navigate = useNavigate();
 
+  if (!state) return null;
+
   const sections = [
     { type: Period.MORNING, icon: 'wb_sunny', color: 'text-amber-500', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
     { type: Period.AFTERNOON, icon: 'partly_cloudy_day', color: 'text-blue-500', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },

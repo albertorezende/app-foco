@@ -1,12 +1,12 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Cache the AI instance to avoid re-initializing if possible
+// Cache the AI instance
 let aiInstance: GoogleGenAI | null = null;
 
 const getAI = () => {
-  // Safe check for process.env in browser environments
-  const apiKey = typeof process !== 'undefined' && process.env ? process.env.API_KEY : null;
+  // Accessing API_KEY directly from process.env as per guidelines
+  const apiKey = process.env.API_KEY;
   
   if (!aiInstance && apiKey) {
     aiInstance = new GoogleGenAI({ apiKey });

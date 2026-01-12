@@ -15,7 +15,7 @@ const ProfilePage: React.FC = () => {
 
     const pendingPoints = [
       ...(state.routines || []).filter(r => !r.completed).map(r => Number(r.penalty || 0)),
-      ...(state.tasks || []).filter(t => t.completed ? 0 : 15)
+      ...(state.tasks || []).filter(t => !t.completed).map(() => 15)
     ].reduce((a, b) => a + b, 0);
 
     return donePoints - pendingPoints;

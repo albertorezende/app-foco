@@ -8,6 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../App';
 import { TaskCategory } from '../types';
 
+interface ChartDataItem {
+  name: string;
+  value: number;
+  fill?: string;
+}
+
 const EvolutionPage: React.FC = () => {
   const { state } = useAppContext();
   const navigate = useNavigate();
@@ -41,7 +47,7 @@ const EvolutionPage: React.FC = () => {
 
     const pendingPoints = [
       ...state.routines.filter(r => !r.completed).map(r => r.penalty),
-      ...state.tasks.filter(t => !t.completed).map(t => 15)
+      ...state.tasks.filter(t => !t.completed).map(() => 15)
     ].reduce((a, b) => a + b, 0);
 
     return { done: donePoints, pending: pendingPoints, balance: donePoints - pendingPoints };
@@ -52,7 +58,7 @@ const EvolutionPage: React.FC = () => {
     return historyBalance + todayStats.balance;
   }, [state.history, todayStats.balance]);
 
-  const chartData = useMemo(() => {
+  const chartData: ChartDataItem[] = useMemo(() => {
     if (activePeriod === 'Diário') {
       return [
         { name: 'REALIZADO', value: todayStats.done, fill: '#14B8A6' },
