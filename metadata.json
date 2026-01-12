@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Copy of Rule of 3 Planner",
+  "description": "A gamified productivity application focused on the Rule of 3 methodology, featuring life-balance tracking, streaks, and AI-powered task prioritization.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

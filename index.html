@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Rule of 3 - Electric Energy</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+        // Provide a basic process shim to prevent reference errors in some environments
+        window.process = { env: {} };
+        
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#14B8A6", // Teal Vibrante
+                        "primary-dark": "#0D9488",
+                        "background-light": "#F8FAFC", 
+                        "background-dark": "#0F172A", 
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                        "accent-sand": "#F59E0B", 
+                        "soft-blue": "#0EA5E9", // Cyan/Blue Sky
+                        "peace-rose": "#F43F5E" 
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "sans-serif"],
+                        headline: ["Quicksand", "sans-serif"]
+                    },
+                    boxShadow: {
+                        soft: "0 10px 40px -10px rgba(20, 184, 166, 0.15)",
+                        card: "0 4px 25px -2px rgba(0, 0, 0, 0.06)",
+                        floating: "0 15px 45px -5px rgba(20, 184, 166, 0.45)"
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #F8FAFC; color: #1E293B; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+        ::-webkit-scrollbar { display: none; }
+        .page-transition { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Cores específicas de categoria */
+        .bg-cat-trabalho { background-color: #0EA5E9; }
+        .bg-cat-saude { background-color: #10B981; }
+        .bg-cat-espiritual { background-color: #8B5CF6; }
+        .bg-cat-lar { background-color: #F97316; }
+        .bg-cat-estudo { background-color: #EC4899; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react/": "https://esm.sh/react@19.0.0/",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@7.1.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.15.0?external=react,react-dom",
+    "@google/genai": "https://esm.sh/@google/genai@1.35.0"
+  }
+}
+</script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-500">
+    <div id="root"></div>
+</body>
+</html>
