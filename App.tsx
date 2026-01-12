@@ -38,6 +38,8 @@ const getBrasiliaDateString = (date: Date) => date.toISOString().split('T')[0];
 interface AppContextType {
   state: AppState | null;
   currentUser: string | null;
+  isDarkMode: boolean;
+  toggleDarkMode: () => void;
   login: (username: string) => void;
   logout: () => void;
   addTask: (task: any) => boolean;
@@ -59,6 +61,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [currentUser, setCurrentUser] = useState<string | null>(() => {
     try { return localStorage.getItem('rule_of_3_active_user'); } catch { return null; }
   });
+
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem('rule_of_3_dark_mode');
+    if (saved !== null) return JSON.parse(saved);
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
   
   const [state, setState] = useState<AppState | null>(() => {
     try {
@@ -70,6 +78,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch (e) { console.error("Persistence Init Error:", e); }
     return null;
   });
+
+  const toggleDarkMode = useCallback(() => {
+    setIsDarkMode(prev => !prev);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('rule_of_3_dark_mode', JSON.stringify(isDarkMode));
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   const createInitialState = useCallback((username: string): AppState => ({
     tasks: [],
@@ -223,7 +246,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     window.location.reload(); 
   };
 
-  return <AppContext.Provider value={{ state, currentUser, login, logout, addTask, updateTask, addRoutine, toggleTask, toggleRoutine, resetData }}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{ state, currentUser, isDarkMode, toggleDarkMode, login, logout, addTask, updateTask, addRoutine, toggleTask, toggleRoutine, resetData }}>{children}</AppContext.Provider>;
 };
 
 const BottomNav = () => {
@@ -265,7 +288,6 @@ const AppContent = () => {
   const { currentUser, state } = useAppContext();
   const location = useLocation();
   
-  // Se não tem usuário, força a tela de Login independentemente da rota (exceto se houver lógica de roteamento interna)
   if (!currentUser) {
     return (
       <div className="min-h-screen max-w-md mx-auto relative bg-background-light dark:bg-background-dark">
@@ -276,7 +298,6 @@ const AppContent = () => {
     );
   }
 
-  // Se tem usuário mas o estado ainda está sendo carregado
   if (!state) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background-light dark:bg-background-dark text-primary font-bold gap-4 p-8 text-center">
@@ -289,7 +310,7 @@ const AppContent = () => {
   const hideNav = ['/add-task', '/edit-task', '/add-routine'].some(p => location.pathname.startsWith(p));
 
   return (
-    <div className="min-h-screen max-w-md mx-auto relative bg-background-light dark:bg-background-dark">
+    <div className="min-h-screen max-w-md mx-auto relative bg-background-light dark:bg-background-dark transition-colors duration-500">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/evolution" element={<EvolutionPage />} />
