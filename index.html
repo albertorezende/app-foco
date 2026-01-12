@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script>
-        // Provide a basic process shim to prevent reference errors in some environments
+        // Shim process.env para compatibilidade em tempo de execução
         window.process = { env: {} };
         
         tailwind.config = {
@@ -17,14 +17,14 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#14B8A6", // Teal Vibrante
+                        primary: "#14B8A6", 
                         "primary-dark": "#0D9488",
                         "background-light": "#F8FAFC", 
                         "background-dark": "#0F172A", 
                         "surface-light": "#FFFFFF",
                         "surface-dark": "#1E293B",
                         "accent-sand": "#F59E0B", 
-                        "soft-blue": "#0EA5E9", // Cyan/Blue Sky
+                        "soft-blue": "#0EA5E9", 
                         "peace-rose": "#F43F5E" 
                     },
                     fontFamily: {
@@ -48,7 +48,6 @@
         .page-transition { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Cores específicas de categoria */
         .bg-cat-trabalho { background-color: #0EA5E9; }
         .bg-cat-saude { background-color: #10B981; }
         .bg-cat-espiritual { background-color: #8B5CF6; }
@@ -58,19 +57,20 @@
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react/": "https://esm.sh/react@19.0.0/",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "react-router-dom": "https://esm.sh/react-router-dom@7.1.0?external=react,react-dom",
-    "recharts": "https://esm.sh/recharts@2.15.0?external=react,react-dom",
-    "@google/genai": "https://esm.sh/@google/genai@1.35.0"
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-500">
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
