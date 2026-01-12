@@ -26,12 +26,11 @@ const ProfilePage: React.FC = () => {
     return historyBalance + todayBalance;
   }, [state.history, todayBalance]);
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(val || 0);
+  const formatScore = (val: number) => {
+    return (val || 0).toFixed(1).replace('.', ',');
   };
+
+  const isNegative = totalAccumulatedBalance < 0;
 
   const badges = [
     { icon: 'bolt', label: 'Proativo', color: 'bg-amber-500 text-white shadow-amber-500/20' },
@@ -93,18 +92,22 @@ const ProfilePage: React.FC = () => {
 
       <main className="px-6 space-y-12 max-w-md mx-auto">
         {/* Card de Saldo Vibrante */}
-        <div className="bg-primary-dark rounded-[3rem] p-10 shadow-floating relative overflow-hidden text-center">
-          <div className="absolute top-0 right-0 size-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-2xl"></div>
-          <div className="absolute bottom-0 left-0 size-40 bg-black/10 rounded-full -ml-20 -mb-20 blur-2xl"></div>
+        <div className={`${isNegative ? 'bg-white dark:bg-red-900/10 border-4 border-red-500 shadow-red-500/20' : 'bg-primary-dark'} rounded-[3rem] p-10 shadow-floating relative overflow-hidden text-center transition-colors duration-500`}>
+          {!isNegative && (
+            <>
+              <div className="absolute top-0 right-0 size-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-2xl"></div>
+              <div className="absolute bottom-0 left-0 size-40 bg-black/10 rounded-full -ml-20 -mb-20 blur-2xl"></div>
+            </>
+          )}
           
           <div className="relative z-10 flex flex-col items-center">
-            <p className="text-[11px] font-black text-teal-100 uppercase tracking-[0.4em] mb-3">Energia Acumulada</p>
-            <p className="text-5xl font-black text-white mb-4">
-              {formatCurrency(totalAccumulatedBalance)}
+            <p className={`text-[11px] font-black uppercase tracking-[0.4em] mb-3 ${isNegative ? 'text-red-500' : 'text-teal-100'}`}>Energia Acumulada</p>
+            <p className={`text-5xl font-black mb-4 ${isNegative ? 'text-red-500' : 'text-white'}`}>
+              {formatScore(totalAccumulatedBalance)}
             </p>
-            <div className="flex items-center gap-3 bg-white/20 px-5 py-2 rounded-2xl backdrop-blur-md">
-              <span className="material-symbols-outlined text-amber-400 filled text-lg">stars</span>
-              <span className="text-[11px] font-black text-white uppercase tracking-widest">Saldo de Troca</span>
+            <div className={`flex items-center gap-3 px-5 py-2 rounded-2xl backdrop-blur-md ${isNegative ? 'bg-red-500/10 text-red-500' : 'bg-white/20 text-white'}`}>
+              <span className={`material-symbols-outlined filled text-lg ${isNegative ? 'text-red-500' : 'text-amber-400'}`}>stars</span>
+              <span className="text-[11px] font-black uppercase tracking-widest">Saldo de Troca</span>
             </div>
           </div>
         </div>
@@ -135,7 +138,7 @@ const ProfilePage: React.FC = () => {
                         <span className="material-symbols-outlined text-white text-2xl">{item.icon}</span>
                       </div>
                       <div className="bg-emerald-500 px-5 py-2 rounded-2xl shadow-lg">
-                        <span className="text-xs font-black text-white">{formatCurrency(item.price)}</span>
+                        <span className="text-xs font-black text-white">R$ {item.price.toFixed(1).replace('.', ',')}</span>
                       </div>
                     </div>
                     

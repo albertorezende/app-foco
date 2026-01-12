@@ -17,18 +17,16 @@ interface ChartDataItem {
 const EvolutionPage: React.FC = () => {
   const { state } = useAppContext();
   const navigate = useNavigate();
-  const [activePeriod, setActivePeriod] = useState('Semanal');
+  // Alterado: padrão agora é 'Diário'
+  const [activePeriod, setActivePeriod] = useState('Diário');
 
   if (!state) return null;
 
   const periods = ['Diário', 'Semanal', 'Mensal', 'Total'];
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2
-    }).format(val);
+  // Alterado: Remove R$ e mostra apenas 1 casa decimal com vírgula
+  const formatScore = (val: number) => {
+    return val.toFixed(1).replace('.', ',');
   };
 
   const categoryMap: Record<string, string> = {
@@ -186,7 +184,7 @@ const EvolutionPage: React.FC = () => {
             </div>
             <div className="text-right">
               <p className={`font-black text-lg ${currentPeriodBalance >= 0 ? 'text-primary' : 'text-peace-rose'}`}>
-                {formatCurrency(currentPeriodBalance)}
+                {formatScore(currentPeriodBalance)}
               </p>
             </div>
           </div>
@@ -206,7 +204,7 @@ const EvolutionPage: React.FC = () => {
                 <Tooltip 
                   cursor={{ fill: 'rgba(20, 184, 166, 0.05)' }}
                   contentStyle={{ backgroundColor: '#fff', borderRadius: '12px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', fontSize: '10px', fontWeight: 'bold' }}
-                  formatter={(value: number) => [formatCurrency(value), 'Balanço']}
+                  formatter={(value: number) => [formatScore(value), 'Balanço']}
                 />
                 <ReferenceLine y={0} stroke="#e2e8f0" strokeWidth={1} />
                 <Bar dataKey="value" radius={activePeriod === 'Diário' ? [12, 12, 12, 12] : [6, 6, 6, 6]} barSize={activePeriod === 'Diário' ? 40 : 12}>
@@ -237,7 +235,7 @@ const EvolutionPage: React.FC = () => {
               <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Acumulado</span>
             </div>
             <p className={`text-xl font-black ${totalAccumulatedBalance >= 0 ? 'text-primary' : 'text-peace-rose'}`}>
-              {formatCurrency(totalAccumulatedBalance)}
+              {formatScore(totalAccumulatedBalance)}
             </p>
           </div>
         </div>

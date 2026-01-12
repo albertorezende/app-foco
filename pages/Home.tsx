@@ -53,26 +53,20 @@ const HomePage: React.FC = () => {
       <div className="px-6 mb-8">
         <div className="bg-primary rounded-[2.5rem] p-7 shadow-floating relative overflow-hidden group">
           <div className="absolute top-0 right-0 size-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
-          <div className="relative z-10 flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              <div className="relative size-20">
-                <svg className="size-full" viewBox="0 0 36 36">
-                  <path className="stroke-white/20" strokeWidth="4" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path className="stroke-white transition-all duration-1000" strokeWidth="4" strokeDasharray={`${progressPercent}, 100`} strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-sm font-black text-white">{progressPercent}%</span>
-                </div>
-              </div>
-              <div>
-                <p className="text-white font-black text-lg">Energia Total</p>
-                <p className="text-white/70 text-xs font-bold uppercase tracking-wider">Você está indo bem!</p>
+          <div className="relative z-10 flex items-center gap-5">
+            <div className="relative size-20">
+              <svg className="size-full" viewBox="0 0 36 36">
+                <path className="stroke-white/20" strokeWidth="4" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="stroke-white transition-all duration-1000" strokeWidth="4" strokeDasharray={`${progressPercent}, 100`} strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-sm font-black text-white">{progressPercent}%</span>
               </div>
             </div>
-            
-            <Link to="/ai-coach" className="size-14 rounded-2xl bg-white text-primary flex items-center justify-center hover:bg-slate-50 transition-all active:scale-95 shadow-card">
-              <span className="material-symbols-outlined filled text-3xl">auto_awesome</span>
-            </Link>
+            <div>
+              <p className="text-white font-black text-lg">Energia Total</p>
+              <p className="text-white/70 text-xs font-bold uppercase tracking-wider">Você está indo bem!</p>
+            </div>
           </div>
         </div>
       </div>
