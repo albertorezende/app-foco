@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import { HashRouter, Routes, Route, useNavigate, useLocation, Link, Navigate } from 'react-router-dom';
-import { AppState, Task, RoutineItem, TaskCategory, Period, DailyLog } from './types';
+import { AppState, Task, RoutineItem, TaskCategory, Period, DailyLog, DailyLogDetail } from './types';
 import HomePage from './pages/Home';
 import EvolutionPage from './pages/Evolution';
 import RoutinePage from './pages/Routine';
@@ -155,6 +155,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return acc;
       }, {} as any);
 
+      // Captura detalhes específicos do dia para o histórico detalhado
+      const details: DailyLogDetail[] = [
+        ...prev.tasks.map(t => ({
+          title: t.title,
+          points: t.completed ? (t.points || 5) : -15,
+          type: (t.completed ? 'gain' : 'penalty') as 'gain' | 'penalty'
+        })),
+        ...prev.routines.map(r => ({
+          title: r.title,
+          points: r.completed ? (r.points || 0) : -(r.penalty || 0),
+          type: (r.completed ? 'gain' : 'penalty') as 'gain' | 'penalty'
+        }))
+      ];
+
       const newHistoryEntry: DailyLog = {
         date: lastCycleDate,
         points: dailyNetBalance,
@@ -162,7 +176,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         totalPenalty: penaltyFromRoutines + penaltyFromTasks,
         completedTaskIds: prev.tasks.filter(t => t.completed).map(t => t.id),
         completedRoutineIds: prev.routines.filter(r => r.completed).map(r => r.id),
-        categoryScores
+        categoryScores,
+        details
       };
 
       const allTasksCompleted = prev.tasks.length === 3 && prev.tasks.every(t => t.completed);

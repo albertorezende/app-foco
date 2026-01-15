@@ -35,6 +35,12 @@ export interface RoutineItem {
   penalty: number;
 }
 
+export interface DailyLogDetail {
+  title: string;
+  points: number;
+  type: 'gain' | 'penalty';
+}
+
 export interface DailyLog {
   date: string; // YYYY-MM-DD
   points: number; // Saldo líquido do dia
@@ -43,6 +49,7 @@ export interface DailyLog {
   completedTaskIds: string[]; // IDs das tarefas concluídas
   completedRoutineIds: string[]; // IDs das rotinas concluídas
   categoryScores: { [key in TaskCategory]: number };
+  details?: DailyLogDetail[]; // Detalhes opcionais para logs novos
 }
 
 export interface AppState {

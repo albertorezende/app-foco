@@ -17,14 +17,13 @@ interface ChartDataItem {
 const EvolutionPage: React.FC = () => {
   const { state } = useAppContext();
   const navigate = useNavigate();
-  // Alterado: padrão agora é 'Diário'
   const [activePeriod, setActivePeriod] = useState('Diário');
+  const [showFullHistory, setShowFullHistory] = useState(false);
 
   if (!state) return null;
 
   const periods = ['Diário', 'Semanal', 'Mensal', 'Total'];
 
-  // Alterado: Remove R$ e mostra apenas 1 casa decimal com vírgula
   const formatScore = (val: number) => {
     return val.toFixed(1).replace('.', ',');
   };
@@ -117,17 +116,84 @@ const EvolutionPage: React.FC = () => {
     ? todayStats.balance 
     : chartData.reduce((acc: number, curr) => acc + (curr.value || 0), 0);
 
+  // Histórico completo formatado
+  const fullHistoryList = useMemo(() => {
+    // Inclui o dia de hoje (em tempo real) no topo da lista
+    const todayLog = {
+      date: 'Hoje',
+      points: todayStats.balance,
+      details: [
+        ...state.tasks.map(t => ({ title: t.title, points: t.completed ? 5 : -15, type: t.completed ? 'gain' : 'penalty' as const })),
+        ...state.routines.map(r => ({ title: r.title, points: r.completed ? r.points : -r.penalty, type: r.completed ? 'gain' : 'penalty' as const }))
+      ]
+    };
+    return [todayLog, ...[...state.history].reverse()];
+  }, [state.history, state.tasks, state.routines, todayStats.balance]);
+
   return (
-    <div className="pb-32 page-transition bg-background-light dark:bg-background-dark min-h-screen">
+    <div className="pb-32 page-transition bg-background-light dark:bg-background-dark min-h-screen relative">
+      {/* Header com Histórico */}
       <header className="px-6 pt-10 pb-4 flex items-center justify-between">
         <button onClick={() => navigate(-1)} className="size-10 flex items-center justify-start text-slate-400">
           <span className="material-symbols-outlined !text-2xl">chevron_left</span>
         </button>
         <h2 className="text-sm font-black uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200">Minha Evolução</h2>
-        <button className="size-10 flex items-center justify-end text-slate-400">
-          <span className="material-symbols-outlined !text-2xl">share</span>
+        <button 
+          onClick={() => setShowFullHistory(true)}
+          className="size-10 flex items-center justify-end text-primary hover:scale-110 transition-transform"
+        >
+          <span className="material-symbols-outlined !text-2xl filled">history</span>
         </button>
       </header>
+
+      {/* Histórico Modal/Overlay */}
+      {showFullHistory && (
+        <div className="fixed inset-0 z-[100] bg-background-light dark:bg-background-dark overflow-y-auto animate-in fade-in slide-in-from-bottom duration-500 pb-32">
+          <header className="sticky top-0 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-xl px-6 py-6 border-b border-primary/10 flex items-center justify-between z-10">
+            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white">Registro de Atividades</h3>
+            <button 
+              onClick={() => setShowFullHistory(false)}
+              className="size-10 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-500"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </header>
+
+          <main className="px-6 pt-8 space-y-10">
+            {fullHistoryList.length === 0 ? (
+              <p className="text-center text-slate-400 font-bold p-20">Nenhum histórico encontrado ainda.</p>
+            ) : (
+              fullHistoryList.map((day, idx) => (
+                <div key={idx} className="space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <p className="text-xs font-black uppercase tracking-widest text-slate-400">
+                      {day.date === 'Hoje' ? 'Hoje' : new Date(day.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' })}
+                    </p>
+                    <span className={`text-xs font-black ${day.points >= 0 ? 'text-primary' : 'text-peace-rose'}`}>
+                      {day.points >= 0 ? '+' : ''}{formatScore(day.points)} PTS
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {day.details && day.details.length > 0 ? (
+                      day.details.map((detail, dIdx) => (
+                        <div key={dIdx} className="flex items-center justify-between p-4 bg-white dark:bg-surface-dark rounded-2xl border border-primary/5 shadow-sm">
+                          <p className="text-xs font-bold text-slate-700 dark:text-slate-200">{detail.title}</p>
+                          <span className={`text-[10px] font-black ${detail.points >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
+                            {detail.points >= 0 ? '+' : ''}{detail.points.toFixed(1).replace('.', ',')}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-[10px] text-slate-300 italic px-4">Dados detalhados indisponíveis para este dia.</p>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </main>
+        </div>
+      )}
 
       <div className="px-6 mb-8 flex flex-col gap-4">
         <div className="flex items-center justify-between gap-2">
